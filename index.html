@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reducing Journey Uncertainty — HCI Case Study</title>
+<meta name="description" content="An HCI case study on reducing commute uncertainty for day-scholar students, from user research through information architecture to a validated MVP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#overview">Skip to content</a>
+
+<nav class="topnav" aria-label="Case study sections">
+  <div class="topnav__brand">
+    <span class="topnav__mark" aria-hidden="true">●</span>
+    Journey&nbsp;Uncertainty — Case&nbsp;Study
+  </div>
+  <ul class="topnav__list">
+    <li><a href="#overview"><span class="topnav__n">01</span>Overview</a></li>
+    <li><a href="#research"><span class="topnav__n">02</span>Research</a></li>
+    <li><a href="#persona"><span class="topnav__n">03</span>Persona</a></li>
+    <li><a href="#empathy"><span class="topnav__n">04</span>Empathy</a></li>
+    <li><a href="#journey"><span class="topnav__n">05</span>Journey</a></li>
+    <li><a href="#pain-point"><span class="topnav__n">06</span>Pain&nbsp;Point</a></li>
+    <li><a href="#user-stories"><span class="topnav__n">07</span>Stories</a></li>
+    <li><a href="#features"><span class="topnav__n">08</span>Features</a></li>
+    <li><a href="#card-sort"><span class="topnav__n">09</span>Card&nbsp;Sort</a></li>
+    <li><a href="#v1-ia"><span class="topnav__n">10</span>V1&nbsp;IA</a></li>
+    <li><a href="#tree-test"><span class="topnav__n">11</span>Tree&nbsp;Test</a></li>
+    <li><a href="#ia-pivot"><span class="topnav__n">12</span>IA&nbsp;Pivot</a></li>
+    <li><a href="#moscow"><span class="topnav__n">13</span>MoSCoW</a></li>
+    <li><a href="#dfv"><span class="topnav__n">14</span>DFV</a></li>
+    <li><a href="#final-mvp"><span class="topnav__n">15</span>Final&nbsp;MVP</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <p class="eyebrow">HCI Mid&#8209;Term Case Study</p>
+      <h1>Reducing Journey<br>Uncertainty</h1>
+      <p class="hero__sub">"Predicting the Unpredictable Commute" — a research-led information
+        architecture project built around Prashant, a day-scholar student whose commute depends on
+        a bus-to-train connection he can never quite verify.</p>
+      <p class="hero__line">One commuter. One recurring decision he can't make with confidence:
+        <em>should I keep waiting?</em></p>
+    </div>
+    <div class="statusboard" role="img" aria-label="Mock departure board reading: bus status unknown, expected arrival unknown, connecting train at risk. This represents the uncertainty at the centre of the research problem.">
+      <div class="statusboard__head">
+        <span class="statusboard__dot" aria-hidden="true"></span> LIVE COMMUTE STATUS
+      </div>
+      <dl class="statusboard__rows">
+        <div class="statusboard__row">
+          <dt>BUS STATUS</dt><dd class="is-unknown">UNKNOWN</dd>
+        </div>
+        <div class="statusboard__row">
+          <dt>EXPECTED ARRIVAL</dt><dd class="is-unknown">&mdash;&nbsp;:&nbsp;&mdash;</dd>
+        </div>
+        <div class="statusboard__row">
+          <dt>CONNECTING TRAIN</dt><dd class="is-risk">AT RISK</dd>
+        </div>
+      </dl>
+      <p class="statusboard__caption">This is the exact moment the research is about — not a hypothetical screen.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- 01 OVERVIEW -->
+<section id="overview" class="section">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">01</span> Project Overview</p>
+    <h2>Daily College Commute — Reducing Journey Uncertainty</h2>
+
+    <div class="prose-grid">
+      <article>
+        <h3>Broken Experience</h3>
+        <p>A college student's daily commute becomes stressful when they cannot reliably understand
+          what is happening with their bus/shuttle journey, especially when delays may affect their
+          connecting train.</p>
+      </article>
+      <article>
+        <h3>Context</h3>
+        <p>The user depends on public transport to reach college. During the journey, uncertainty
+          about the current bus status, delays, arrival time, and their possible impact on the
+          connecting train can force the user to make last-minute decisions.</p>
+      </article>
+      <article>
+        <h3>Purpose</h3>
+        <p>This HCI project aims to understand the user's actual commute experience, identify the
+          core pain point, and use research to develop and validate an appropriate information
+          structure and prioritized solution.</p>
+      </article>
+    </div>
+
+    <p class="note">The problem is not simply the absence of a transport app. The underlying
+      experience problem is <strong>uncertainty during the commute</strong> and difficulty knowing
+      what to do when the journey is disrupted.</p>
+
+    <div class="chain" aria-label="Project process, in order">
+      <span class="chain__link">Research</span>
+      <span class="chain__link">Pain Point</span>
+      <span class="chain__link">User Stories</span>
+      <span class="chain__link">Feature Ideation</span>
+      <span class="chain__link">Card Sort</span>
+      <span class="chain__link">Information Architecture</span>
+      <span class="chain__link">Tree Test</span>
+      <span class="chain__link">IA Pivot</span>
+      <span class="chain__link">MoSCoW</span>
+      <span class="chain__link">DFV</span>
+      <span class="chain__link chain__link--final">Final MVP</span>
+    </div>
+  </div>
+</section>
+
+<!-- 02 RESEARCH -->
+<section id="research" class="section section--tint">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">02</span> User Research</p>
+    <h2>What actually happens on the commute</h2>
+
+    <p>Qualitative interviews were conducted with 4 real day-scholar commuters to understand their
+      actual commuting behaviour, frustrations, coping strategies, and experiences with delays. The
+      interviews focused on real past experiences rather than asking participants to validate a
+      proposed solution. <span class="tag tag--evidence">Source · raw interview responses</span></p>
+
+    <h3 class="h-sub">Participants</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th scope="col">Participant</th><th scope="col">Commute</th><th scope="col">Key observation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Prashant</td>
+            <td>Scooty / bus / train (MSRTC)</td>
+            <td>Rarely relies on the bus, but when he does, has no way to confirm its status —
+              calls the relevant person to ask whether the bus is delayed. Has previously missed his connecting train during rain.</td>
+          </tr>
+          <tr>
+            <td>Yuvraj</td>
+            <td>Bike, switching to car in monsoon</td>
+            <td>Leaves home 15–20 minutes early as a buffer; bad-road overtaking on a one-way road
+              is a recurring source of delay and frustration.</td>
+          </tr>
+          <tr>
+            <td>Ganesh</td>
+            <td>Bike, long village-road commute</td>
+            <td>Frequently arrives late because of difficult village and highway road conditions;
+              compensates by driving faster on the better stretches.</td>
+          </tr>
+          <tr>
+            <td>Aryan</td>
+            <td>Long-distance bike commute</td>
+            <td>Arrived 30 minutes late to an exam during heavy rain; now leaves a full hour early
+              on exam days.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="h-sub">Key Findings</h3>
+    <div class="findings-grid">
+      <div class="finding">
+        <span class="finding__n">1</span>
+        <p><strong>Commuters cannot reliably predict journey time.</strong> Participants used
+          personal buffers, transport changes, or other workarounds to compensate for that uncertainty.</p>
+      </div>
+      <div class="finding">
+        <span class="finding__n">2</span>
+        <p><strong>Delays create last-minute decisions.</strong> Rain, road conditions, and transport
+          delays make the expected journey time unreliable in the moment, not just on average.</p>
+      </div>
+      <div class="finding">
+        <span class="finding__n">3</span>
+        <p><strong>Users rely on manual workarounds</strong> — leaving earlier, changing transport
+          mode, checking information by phone call, or simply accepting extra waiting time — instead
+          of trustworthy journey information.</p>
+      </div>
+      <div class="finding">
+        <span class="finding__n">4</span>
+        <p><strong>The consequences can be serious.</strong> One participant reported arriving 30
+          minutes late to an exam after underestimating a rainy-day commute.</p>
+      </div>
+    </div>
+
+    <blockquote class="evidence">
+      <p>"Started going 1 hour earlier on exam day."</p>
+      <cite>— Aryan <span class="tag tag--evidence">Interview · bike commuter</span></cite>
+      <p class="evidence__note">This behaviour shows a user creating a large personal time buffer
+        because he cannot reliably predict the commute — even though his delay source is road
+        conditions, not a bus.</p>
+    </blockquote>
+
+    <div class="callout callout--scope">
+      <h3>Scoping decision</h3>
+      <p>The interviews revealed <strong>two different flavours of commute uncertainty</strong>:
+        physical, road-condition delays for the bike and car commuters (Yuvraj, Ganesh, Aryan), which
+        no information product can fix, and <strong>information-gap</strong> delays for the one
+        bus/train commuter (Prashant), where the real problem is that he has no way to check status
+        and must call someone to find out.</p>
+      <p>This project scopes specifically to the second problem, because it is the one an
+        information architecture can actually address. Every persona, pain point, and feature from
+        this point forward is built from Prashant's validated experience, not an average of all
+        four participants.</p>
+    </div>
+
+    <p class="note">The recurring issue across the research is not transportation itself — it is
+      <strong>uncertainty about how long the journey will actually take, and what to do when
+      conditions change.</strong> These findings were used to build the research-backed User Persona
+      and identify the core pain point.</p>
+  </div>
+</section>
+
+<!-- 03 PERSONA -->
+<section id="persona" class="section">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">03</span> User Persona</p>
+    <h2>Prashant Kumar</h2>
+
+    <div class="persona-card">
+      <div class="persona-card__id">
+        <dl class="persona-facts">
+          <div><dt>Age</dt><dd>20</dd></div>
+          <div><dt>Role</dt><dd>Day Scholar</dd></div>
+          <div><dt>Travel frequency</dt><dd>4 days a week</dd></div>
+          <div><dt>Route</dt><dd>Home → Karjat station → College</dd></div>
+        </dl>
+      </div>
+      <div class="persona-card__body">
+        <h3>Context</h3>
+        <p>Prashant commutes between his home, the railway station, and college. His full journey
+          takes around <strong>2 hours altogether</strong>. He depends on public transport (MSRTC bus)
+          for part of the route, and occasionally needs to call someone to find out whether the bus
+          is delayed.</p>
+
+        <h3>Goal</h3>
+        <p>Reach college or home on time — without unnecessary waiting, rushing, or missing his
+          connecting transport.</p>
+
+        <h3>Current behaviour / workarounds</h3>
+        <ul>
+          <li>Rarely relies on the bus, but on the occasions he does, has no independent way to
+            confirm its status — his own words: <em>"the buses are on time once in a blue moon."</em></li>
+          <li>When unsure, calls the relevant operator to ask whether the bus is late.</li>
+          <li>If needed, asks a friend to pick him up instead of waiting.</li>
+          <li>Scrolls Instagram reels to distract himself from the chaos while waiting.</li>
+        </ul>
+
+        <h3>Frustrations</h3>
+        <ul class="tag-list">
+          <li>Unpredictable travel time</li>
+          <li>Bus delays</li>
+          <li>Missing his connecting train</li>
+          <li>Heavy rain worsening the journey</li>
+          <li>No way to know if the bus is delayed</li>
+          <li>Having to call someone for information</li>
+          <li>Network problems making that call unreliable</li>
+        </ul>
+
+        <h3>Feelings</h3>
+        <p>Frustrated when the journey is delayed. Worried about missing his train. Stressed about
+          reaching home late.</p>
+      </div>
+    </div>
+
+    <div class="callout callout--assumption">
+      <p class="callout__label">Assumption vs. finding</p>
+      <p>Before research, the working Proto-Persona guessed a commute of <strong>"45 minutes,
+        sometimes up to 1.5 hours."</strong> The actual interview response was explicit: <strong>"it
+        takes 2 hours altogether."</strong> The guess wasn't just imprecise — it understated the full
+        journey by more than an hour. The persona above uses the validated figure, not the original
+        guess.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 EMPATHY MAP -->
+<section id="empathy" class="section section--tint">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">04</span> Empathy Map</p>
+    <h2>Says · Thinks · Does · Feels</h2>
+
+    <figure class="artifact-figure">
+      <img class="artifact-image" src="images/Empathy_Map_Prashant.png" alt="Empathy Map for Prashant Kumar showing Says, Thinks, Does, and Feels">
+      <figcaption>Empathy Map for Prashant Kumar, showing what he says, thinks, does, and feels
+        while dealing with an uncertain bus status and a possible missed train connection.</figcaption>
+    </figure>
+
+    <h3 class="h-sub">Text version</h3>
+    <div class="empathy-grid">
+      <div class="empathy-cell">
+        <h4>Says</h4>
+        <ul>
+          <li>"The buses are on time once in a blue moon."</li>
+          <li>"It's very rare of me using bus."</li>
+        </ul>
+      </div>
+      <div class="empathy-cell">
+        <h4>Thinks <span class="tag tag--inferred">inferred</span></h4>
+        <ul>
+          <li>"Will I miss my connecting train?"</li>
+          <li>"How long will this journey actually take?"</li>
+        </ul>
+      </div>
+      <div class="empathy-cell">
+        <h4>Does</h4>
+        <ul>
+          <li>Calls the relevant operator when unsure about the bus.</li>
+          <li>Asks a friend for a pickup when necessary.</li>
+          <li>Scrolls Instagram reels to distract himself while waiting.</li>
+        </ul>
+      </div>
+      <div class="empathy-cell">
+        <h4>Feels</h4>
+        <ul>
+          <li>Frustrated when the journey is delayed.</li>
+          <li>Worried about missing his train.</li>
+          <li>Stressed about reaching home late.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="note"><strong>Key empathy insight:</strong> Prashant's behaviour shows that uncertainty
+      is not just an information problem. When he doesn't know whether the bus is delayed, he has to
+      contact others, wait, or arrange an alternative — and that is what increases the frustration and
+      worry about his connecting transport.</p>
+  </div>
+</section>
+
+<!-- 05 JOURNEY MAP -->
+<section id="journey" class="section">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">05</span> User Journey Map</p>
+    <h2>The scenario, not the routine</h2>
+
+    <p class="note">Because Prashant rarely relies on the bus, this maps the specific, high-stakes
+      scenario when he does — the moment a bus delay puts his train connection at risk — rather than
+      an everyday routine he's already built coping habits around.</p>
+
+    <figure class="artifact-figure">
+      <img class="artifact-image" src="images/Journey_Map_Prashant.png" alt="User Journey Map for Prashant Kumar showing the six stages of his commute and the emotion line">
+      <figcaption>User Journey Map for Prashant Kumar across six stages of the commute, showing the
+        feelings line rising to its highest stress point while waiting for the bus, and falling once
+        he safely reaches college.</figcaption>
+    </figure>
+
+    <h3 class="h-sub">Text version</h3>
+    <div class="table-wrap">
+      <table class="journey-table">
+        <thead>
+          <tr><th scope="col">Stage</th><th scope="col">Actions</th><th scope="col">Thought <span class="tag tag--inferred">inferred</span></th><th scope="col">Emotion</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1. Plan to travel</td><td>Checks if he has classes; plans time to leave; considers train timing.</td><td>"I should reach on time." / "I hope the bus is not late." / "Let me leave on time."</td><td><span class="emo emo--2">Calm</span></td></tr>
+          <tr><td>2. Reach station and catch train</td><td>Reaches Karjat station; rushes to platform; catches train (if on time).</td><td>"Will I catch my train?" / "I hope I am not late." / "Finally, I made it."</td><td><span class="emo emo--3">Slightly anxious</span></td></tr>
+          <tr><td>3. Get to bus stop</td><td>Leaves home; reaches bus stop; waits for the bus.</td><td>"Where is the bus?" / "Is it running today?" / "I hope I don't have to wait long."</td><td><span class="emo emo--4">Uncertain</span></td></tr>
+          <tr class="is-lowest"><td>4. Wait for bus</td><td>Tries to know bus status; calls the relevant person; waits with uncertainty; checks phone when internet is available.</td><td>"Is the bus delayed?" / "Should I keep waiting?" / "What if I miss my train?" / "No network, can't check now."</td><td><span class="emo emo--7">Highly stressed</span></td></tr>
+          <tr><td>5. Bus in transit</td><td>Travels in bus; unsure about delays; hopes to reach college on time.</td><td>"Will I reach in time?" / "What if there is traffic?" / "I hope the train is not missed."</td><td><span class="emo emo--5">Still worried</span></td></tr>
+          <tr><td>6. Reach college</td><td>Reaches college; attends classes; thinks about the return journey.</td><td>"I reached safely." / "The journey was again stressful." / "Hope return journey goes better."</td><td><span class="emo emo--1">Relieved</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="emotion-line" aria-hidden="true">
+      <span class="emotion-line__dot emo--2"></span>
+      <span class="emotion-line__dot emo--3"></span>
+      <span class="emotion-line__dot emo--4"></span>
+      <span class="emotion-line__dot emo--7"></span>
+      <span class="emotion-line__dot emo--5"></span>
+      <span class="emotion-line__dot emo--1"></span>
+    </div>
+
+    <p class="note"><strong>Lowest point:</strong> the moment a bus delay creates uncertainty about
+      the connecting train. Prashant doesn't know whether to keep waiting, call someone, ask a friend
+      for help, or start worrying about missing his connection.</p>
+    <p class="note"><strong>Journey insight:</strong> the deeper problem isn't "the bus is late." It's
+      that Prashant has no reliable information about the current situation, so he can't confidently
+      decide what to do next — which is what connects this map directly to the Core Pain Point.</p>
+  </div>
+</section>
+
+<!-- 06 PAIN POINT -->
+<section id="pain-point" class="section section--tint">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">06</span> Core Pain Point</p>
+    <h2>Research → Lowest Point → Pain Point</h2>
+
+    <div class="reasoning-chain">
+      <div class="reasoning-step">
+        <span class="reasoning-step__label">Research</span>
+        <p>Prashant experiences unpredictable travel time and bus delays. When unsure, he has to
+          call the operator or ask a friend for help.</p>
+      </div>
+      <div class="reasoning-arrow" aria-hidden="true">↓</div>
+      <div class="reasoning-step">
+        <span class="reasoning-step__label">Journey lowest point</span>
+        <p>The lowest point occurs when a bus delay creates uncertainty about whether Prashant will
+          miss his connecting train.</p>
+      </div>
+      <div class="reasoning-arrow" aria-hidden="true">↓</div>
+      <div class="reasoning-step reasoning-step--final">
+        <span class="reasoning-step__label">Core pain point</span>
+        <p>Prashant cannot reliably know the current bus situation or how a delay will affect his
+          journey, forcing him to depend on others and make last-minute travel decisions.</p>
+      </div>
+    </div>
+
+    <h3 class="h-sub">Why this is the core pain point</h3>
+    <p>The problem is not simply that the bus is sometimes delayed. The deeper issue is the lack of
+      reliable information during the journey — made worse because, for Prashant, the bus/train leg
+      is infrequent and unfamiliar, so he hasn't built routine coping habits for it the way he has for
+      his more regular travel. That combination of rarity and high stakes (missing a train, not just
+      a bus) is what causes:</p>
+    <ul class="tag-list">
+      <li>Unnecessary waiting</li>
+      <li>Worry about missing the connecting train</li>
+      <li>Last-minute decisions</li>
+      <li>Dependence on calls or friends for information</li>
+      <li>Stress about reaching college or home late</li>
+    </ul>
+    <p class="note">This pain point is the basis for the User Stories and later feature ideation.</p>
+  </div>
+</section>
+
+<!-- 07 USER STORIES -->
+<section id="user-stories" class="section">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">07</span> User Stories</p>
+    <h2>From pain point to action</h2>
+    <p class="note">These stories are derived specifically from Prashant's validated experience —
+      the one participant whose commute depends on the bus/train connection this project addresses,
+      not an average across all four interviewees.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="story-card__n">1</span>
+        <h3>Current Commute Status</h3>
+        <p><strong>As a</strong> student commuting to college,<br>
+          <strong>I want to</strong> know the current status of my bus,<br>
+          <strong>so that I can</strong> decide whether to keep waiting or make another travel decision.</p>
+      </div>
+      <div class="story-card">
+        <span class="story-card__n">2</span>
+        <h3>Connecting Train Impact</h3>
+        <p><strong>As a</strong> student who depends on a connecting train,<br>
+          <strong>I want to</strong> understand whether a bus delay will affect my train connection,<br>
+          <strong>so that I can</strong> decide what to do before I miss my train.</p>
+      </div>
+      <div class="story-card">
+        <span class="story-card__n">3</span>
+        <h3>Disruption Information</h3>
+        <p><strong>As a</strong> student travelling by public transport,<br>
+          <strong>I want to</strong> receive timely information when my journey is disrupted,<br>
+          <strong>so that I can</strong> respond without depending on calls or other people for information.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 FEATURE INVENTORY -->
+<section id="features" class="section section--tint">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">08</span> Feature Inventory</p>
+    <h2>20 candidate features</h2>
+    <p class="note">Generated from the identified user needs and User Stories above. These are
+      <strong>candidates, not final features</strong> — they're evaluated through Card Sort →
+      Information Architecture → Tree Test → IA Pivot → MoSCoW → DFV before anything is confirmed
+      for the MVP.</p>
+
+    <div class="feature-groups">
+      <div class="feature-group">
+        <h3>Current Journey Information</h3>
+        <ol>
+          <li>Current Bus Status</li>
+          <li>Expected Arrival Time</li>
+          <li>Delay Information</li>
+          <li>Next Bus Information</li>
+          <li>Estimated Travel Time</li>
+          <li>Bus Route</li>
+          <li>Bus Stops</li>
+        </ol>
+      </div>
+      <div class="feature-group">
+        <h3>Alerts &amp; Updates</h3>
+        <ol start="8">
+          <li>Delay Notifications</li>
+          <li>Bus Arrival Alerts</li>
+          <li>Schedule Change Alerts</li>
+          <li>Service Announcements</li>
+          <li>Rain / Weather Disruption Alert</li>
+        </ol>
+      </div>
+      <div class="feature-group">
+        <h3>Journey &amp; Connection Planning</h3>
+        <ol start="13">
+          <li>Journey Planner</li>
+          <li>Train Timing Information</li>
+          <li>Trip Planning</li>
+          <li>Alternative Travel Information</li>
+          <li>"Will I Catch My Train?" Indicator</li>
+        </ol>
+      </div>
+      <div class="feature-group">
+        <h3>Help &amp; Support</h3>
+        <ol start="18">
+          <li>Frequently Asked Questions</li>
+          <li>Contact / Help</li>
+          <li>Feedback / Report an Issue</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 CARD SORT -->
+<section id="card-sort" class="section">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">09</span> Card Sorting</p>
+    <h2>Finding the mental model</h2>
+
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-item__label">Method</span>Hybrid Card Sort</div>
+      <div class="meta-item"><span class="meta-item__label">Participants</span><span class="tag tag--evidence">14 valid responses</span></div>
+      <div class="meta-item"><span class="meta-item__label">Purpose</span>Discover users' mental models for organising commute information</div>
+    </div>
+
+    <p>Participants sorted the 20 candidate features using five starting categories: Journey
+      Information, Alerts &amp; Updates, Planning &amp; Connections, Help &amp; Support, and
+      Other / New Category.</p>
+
+    <h3 class="h-sub">Alerts &amp; Updates</h3>
+    <div class="table-wrap">
+      <table class="tally-table">
+        <tbody>
+          <tr><td>Delay Notifications</td><td class="tally">11/14</td></tr>
+          <tr><td>Schedule Change Alerts</td><td class="tally">11/14</td></tr>
+          <tr><td>Rain / Weather Disruption Alert</td><td class="tally">11/14</td></tr>
+          <tr><td>Bus Arrival Alerts</td><td class="tally">10/14</td></tr>
+          <tr><td>Delay Information</td><td class="tally">9/14</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Users strongly associated disruption-related information with Alerts &amp; Updates.</p>
+
+    <h3 class="h-sub">Help &amp; Support</h3>
+    <div class="table-wrap">
+      <table class="tally-table">
+        <tbody>
+          <tr><td>Contact / Help</td><td class="tally">11/14</td></tr>
+          <tr><td>Frequently Asked Questions</td><td class="tally">9/14</td></tr>
+          <tr><td>Feedback / Report an Issue</td><td class="tally">9/14</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">A relatively consistent mental model for Help &amp; Support.</p>
+
+    <h3 class="h-sub">Planning &amp; Connections</h3>
+    <div class="table-wrap">
+      <table class="tally-table">
+        <tbody>
+          <tr><td>Journey Planner</td><td class="tally">9/14</td></tr>
+          <tr><td>Trip Planning</td><td class="tally">8/14</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Journey Planner and Trip Planning form a recognisable planning group.</p>
+
+    <h3 class="h-sub">Journey Information</h3>
+    <div class="table-wrap">
+      <table class="tally-table">
+        <tbody>
+          <tr><td>Current Bus Status</td><td class="tally">8/14</td></tr>
+          <tr><td>Expected Arrival Time</td><td class="tally">7/14</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="h-sub">Ambiguous features</h3>
+    <div class="table-wrap">
+      <table class="tally-table tally-table--split">
+        <thead><tr><th scope="col">Feature</th><th scope="col">Journey Info</th><th scope="col">Alerts</th><th scope="col">Planning</th></tr></thead>
+        <tbody>
+          <tr><td>Next Bus Information</td><td class="tally">6/14</td><td class="tally">6/14</td><td>—</td></tr>
+          <tr><td>Estimated Travel Time</td><td class="tally">6/14</td><td class="tally">6/14</td><td>—</td></tr>
+          <tr><td>Bus Route</td><td class="tally">5/14</td><td class="tally">4/14</td><td class="tally">5/14</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">These split responses show that some information didn't have a single clear
+      mental-model category.</p>
+
+    <div class="callout">
+      <p class="callout__label">Mental-model summary</p>
+      <ul>
+        <li>Users strongly associate disruption-related information with Alerts &amp; Updates.</li>
+        <li>Help &amp; Support has a relatively consistent grouping.</li>
+        <li>Journey Planner and Trip Planning form a recognisable planning group.</li>
+        <li>Some journey-information features have ambiguous mental models.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 10 V1 IA -->
+<section id="v1-ia" class="section section--tint">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">10</span> Information Architecture</p>
+    <h2>V1 — built from the Card Sort</h2>
+    <p class="note">Ambiguous features were placed in the category with the most reasonable
+      relationship to their content — a first draft, not a final decision. The Tree Test validates
+      whether users can actually find these features within this structure.</p>
+
+    <div class="tree">
+      <div class="tree__root">HOME</div>
+      <ul class="tree__branch">
+        <li><span class="tree__cat">Journey Information</span>
+          <ul><li>Current Bus Status</li><li>Expected Arrival Time</li><li>Next Bus Information</li><li>Estimated Travel Time</li><li>Bus Route</li><li>Bus Stops</li></ul>
+        </li>
+        <li><span class="tree__cat">Alerts &amp; Updates</span>
+          <ul><li>Delay Information</li><li>Delay Notifications</li><li>Bus Arrival Alerts</li><li>Schedule Change Alerts</li><li>Service Announcements</li><li>Rain / Weather Disruption Alert</li></ul>
+        </li>
+        <li><span class="tree__cat">Planning &amp; Connections</span>
+          <ul><li>Journey Planner</li><li>Trip Planning</li></ul>
+        </li>
+        <li><span class="tree__cat">Help &amp; Support</span>
+          <ul><li>Frequently Asked Questions</li><li>Contact / Help</li><li>Feedback / Report an Issue</li></ul>
+        </li>
+      </ul>
+    </div>
+    <p class="tree-label">V1 Information Architecture</p>
+  </div>
+</section>
+
+<!-- 11 TREE TEST -->
+<section id="tree-test" class="section">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">11</span> Tree Test</p>
+    <h2>Can users actually find it?</h2>
+
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-item__label">Participants</span><span class="tag tag--evidence">5 valid responses</span></div>
+      <div class="meta-item"><span class="meta-item__label">Purpose</span>Test whether users could locate information within the V1 IA, using realistic tasks and no visual UI.</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Task / Feature</th><th scope="col">Correct</th><th scope="col">Result</th></tr></thead>
+        <tbody>
+          <tr><td>Expected Arrival Time</td><td class="tally">4/5</td><td><span class="status-chip status-chip--pass">Mostly successful</span></td></tr>
+          <tr><td>Schedule Change Alerts</td><td class="tally">4/5</td><td><span class="status-chip status-chip--pass">Mostly successful</span></td></tr>
+          <tr><td>Bus Stops</td><td class="tally">3/5</td><td><span class="status-chip status-chip--mixed">Mixed</span></td></tr>
+          <tr><td>Journey Planner</td><td class="tally">2/5</td><td><span class="status-chip status-chip--fail">Failure</span></td></tr>
+          <tr><td>Report an Issue</td><td class="tally">2/5</td><td><span class="status-chip status-chip--fail">Failure</span></td></tr>
+          <tr class="is-major-fail"><td>Current Bus Status</td><td class="tally">0/5</td><td><span class="status-chip status-chip--fail">Major failure</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3 class="h-sub">Main failures</h3>
+        <ul>
+          <li><strong>Current Bus Status — 0/5.</strong> No participant correctly located it: the
+            largest failure in the whole test.</li>
+          <li><strong>Journey Planner — 2/5.</strong> Points to confusion around the Planning &amp;
+            Connections category.</li>
+          <li><strong>Report an Issue — 2/5.</strong> Help &amp; Support wasn't the obvious
+            destination for reporting a problem.</li>
+          <li><strong>Bus Stops — 3/5.</strong> Some ambiguity around route and stop information.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="h-sub">Successful areas</h3>
+        <ul>
+          <li><strong>Expected Arrival Time — 4/5.</strong> Most participants correctly identified
+            Journey Information as the right place.</li>
+          <li><strong>Schedule Change Alerts — 4/5.</strong> Most participants correctly identified
+            Alerts &amp; Updates as the right place.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="note"><strong>Key insight:</strong> some V1 categories were understandable, but
+      <em>Current Bus Status</em> created the strongest confusion of anything tested. That failure is
+      the direct evidence behind the IA pivot below — not a personal preference.</p>
+  </div>
+</section>
+
+<!-- 12 IA PIVOT -->
+<section id="ia-pivot" class="section section--tint">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">12</span> IA Pivot</p>
+    <h2>V1 → Failure → V2</h2>
+
+    <div class="pivot-grid">
+      <div class="pivot-card">
+        <h3>1. Current Bus Status</h3>
+        <p><strong>V1:</strong> Journey Information → Current Bus Status</p>
+        <p><strong>Tree Test:</strong> <span class="status-chip status-chip--fail">0/5 correct</span></p>
+        <p><strong>Problem:</strong> Users did not clearly associate current bus status with the
+          Journey Information category.</p>
+        <p><strong>Change:</strong> Move Current Bus Status into a new <em>Live Journey</em> category.</p>
+      </div>
+      <div class="pivot-card">
+        <h3>2. Journey Information</h3>
+        <p><strong>V1:</strong> Journey Information mixed live/current information with static
+          route information.</p>
+        <p><strong>Problem:</strong> Ambiguity between the current journey and the route itself.</p>
+        <p><strong>Change:</strong> Split into <em>Live Journey</em> and <em>Routes &amp; Stops</em>.</p>
+      </div>
+    </div>
+
+    <div class="tree">
+      <div class="tree__root">HOME</div>
+      <ul class="tree__branch">
+        <li><span class="tree__cat tree__cat--new">Live Journey</span>
+          <ul><li>Current Bus Status</li><li>Expected Arrival Time</li><li>Next Bus Information</li><li>Estimated Travel Time</li><li>Delay Information</li></ul>
+        </li>
+        <li><span class="tree__cat tree__cat--new">Routes &amp; Stops</span>
+          <ul><li>Bus Route</li><li>Bus Stops</li></ul>
+        </li>
+        <li><span class="tree__cat">Alerts &amp; Updates</span>
+          <ul><li>Delay Notifications</li><li>Bus Arrival Alerts</li><li>Schedule Change Alerts</li><li>Service Announcements</li><li>Rain / Weather Disruption Alert</li></ul>
+        </li>
+        <li><span class="tree__cat">Planning &amp; Connections</span>
+          <ul><li>Journey Planner</li><li>Trip Planning</li></ul>
+        </li>
+        <li><span class="tree__cat">Help &amp; Support</span>
+          <ul><li>Frequently Asked Questions</li><li>Contact / Help</li><li>Feedback / Report an Issue</li></ul>
+        </li>
+      </ul>
+    </div>
+    <p class="tree-label">V2 Information Architecture</p>
+
+    <div class="callout">
+      <p class="callout__label">Pivot rationale</p>
+      <ul>
+        <li>"Journey Information" became <strong>Live Journey</strong> to make real-time information more explicit.</li>
+        <li>Current Bus Status moved into Live Journey — it had the strongest Tree Test failure.</li>
+        <li>Bus Route and Bus Stops separated into <strong>Routes &amp; Stops</strong> to distinguish static route structure from live status.</li>
+        <li>Every change here traces to a Tree Test failure, not a preference.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 13 MOSCOW -->
+<section id="moscow" class="section">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">13</span> MoSCoW Prioritization</p>
+    <h2>All 20 features, scoped for the MVP</h2>
+
+    <div class="callout callout--assumption">
+      <p class="callout__label">How DFV changed this</p>
+      <p>Current Bus Status and Journey Planner were the two most debated Must-Have candidates
+        (see DFV, next section). Journey Planner lost that evaluation, so it moved down to
+        <strong>Should Have</strong>. That opened a fourth Must-Have slot, filled by <strong>"Will I
+        Catch My Train?" Indicator</strong> — the feature that most directly answers User Story 2 and
+        sits at the exact lowest point of the Journey Map (the connecting-train risk), rather than a
+        general planning tool.</p>
+    </div>
+
+    <h3 class="h-sub moscow-h moscow-h--must">Must Have — 4</h3>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>Current Bus Status</td><td>Directly addresses the core need to know what is happening with the current journey.</td></tr>
+          <tr><td>Expected Arrival Time</td><td>Helps the user understand when the bus is expected to arrive.</td></tr>
+          <tr><td>Delay Information</td><td>Directly addresses the disruption and uncertainty identified in the research.</td></tr>
+          <tr><td>"Will I Catch My Train?" Indicator</td><td>Answers the exact question at the Journey Map's lowest point and directly fulfils User Story 2.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="h-sub moscow-h moscow-h--should">Should Have — 6</h3>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>Journey Planner</td><td>Useful for planning, but less directly tied to the immediate disruption problem — moved down after losing the DFV comparison.</td></tr>
+          <tr><td>Next Bus Information</td><td>Helps when the current bus is delayed or missed.</td></tr>
+          <tr><td>Estimated Travel Time</td><td>Helps users understand expected journey duration.</td></tr>
+          <tr><td>Delay Notifications</td><td>Provides timely information about disruptions.</td></tr>
+          <tr><td>Train Timing Information</td><td>Supports users who depend on connecting trains.</td></tr>
+          <tr><td>Alternative Travel Information</td><td>Helps users respond when the normal journey is disrupted.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="h-sub moscow-h moscow-h--could">Could Have — 5</h3>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>Bus Route</td><td>Useful reference information but not central to the core pain point.</td></tr>
+          <tr><td>Bus Stops</td><td>Helpful for navigation but not essential to solving the main problem.</td></tr>
+          <tr><td>Bus Arrival Alerts</td><td>Adds convenience but is not essential for the MVP.</td></tr>
+          <tr><td>Schedule Change Alerts</td><td>Useful for future changes but less central to the immediate problem.</td></tr>
+          <tr><td>Rain / Weather Disruption Alert</td><td>Helpful during disruptions but not essential to the core experience.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="h-sub moscow-h moscow-h--wont">Won't Have — 5</h3>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr><td>Service Announcements</td><td>Not essential to solving the core commute problem in the MVP.</td></tr>
+          <tr><td>Trip Planning</td><td>Overlaps with Journey Planner and can be excluded from the current scope.</td></tr>
+          <tr><td>Frequently Asked Questions</td><td>Support content does not directly address the core commute pain point.</td></tr>
+          <tr><td>Contact / Help</td><td>Useful support functionality but not essential to the MVP.</td></tr>
+          <tr><td>Feedback / Report an Issue</td><td>Valuable for a later version but not essential to solving the immediate user problem.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note"><strong>Final distribution:</strong> 4 Must + 6 Should + 5 Could + 5 Won't = 20
+      features. Prioritisation is anchored to the validated pain point — uncertainty during the
+      commute and difficulty understanding how disruption affects the journey. "Won't Have" does not
+      mean useless; it means excluded from the current MVP scope.</p>
+  </div>
+</section>
+
+<!-- 14 DFV -->
+<section id="dfv" class="section section--tint">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">14</span> DFV Analysis</p>
+    <h2>The two most debated Must-Haves</h2>
+    <p>After MoSCoW, the two most debated Must-Have candidates were evaluated using Desirability,
+      Feasibility, and Viability — each scored 1–5 by the project/design team.</p>
+
+    <div class="table-wrap">
+      <table class="dfv-table">
+        <thead><tr><th scope="col">Feature</th><th scope="col">Desirability</th><th scope="col">Feasibility</th><th scope="col">Viability</th><th scope="col">Total</th></tr></thead>
+        <tbody>
+          <tr class="is-winner"><td>Current Bus Status</td><td>5/5</td><td>4/5</td><td>5/5</td><td class="tally">14/15</td></tr>
+          <tr><td>Journey Planner</td><td>4/5</td><td>3/5</td><td>4/5</td><td class="tally">11/15</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col">
+      <div class="pivot-card">
+        <h3>Current Bus Status <span class="status-chip status-chip--pass">14/15</span></h3>
+        <p><strong>Desirability 5/5</strong> — directly addresses the core user need to understand
+          the current commute situation.</p>
+        <p><strong>Feasibility 4/5</strong> — technically achievable, but depends on reliable
+          real-time transport data.</p>
+        <p><strong>Viability 5/5</strong> — directly supports the main purpose of reducing
+          uncertainty during the commute.</p>
+      </div>
+      <div class="pivot-card">
+        <h3>Journey Planner <span class="status-chip status-chip--mixed">11/15</span></h3>
+        <p><strong>Desirability 4/5</strong> — useful for planning, but less directly connected to
+          the immediate disruption problem.</p>
+        <p><strong>Feasibility 3/5</strong> — more complex, since it may require route, timing, and
+          connecting-transport information.</p>
+        <p><strong>Viability 4/5</strong> — useful, but overlaps with existing journey-planning services.</p>
+      </div>
+    </div>
+
+    <p class="note"><strong>Result:</strong> Current Bus Status wins, 14/15 to 11/15 — the stronger
+      overall score and the more direct connection to the core pain point. Because Journey Planner
+      scored lower on both Feasibility and Viability, it moved from Must Have to Should Have in the
+      MoSCoW prioritisation above. That is the mechanism by which this DFV result actually changed
+      the final feature set, rather than sitting alongside it as a separate exercise.</p>
+
+    <p class="note">These DFV scores are project/design-team evaluations based on the research, user
+      needs, and practical product considerations — not participant survey scores, and they are not
+      presented as user-reported ratings.</p>
+  </div>
+</section>
+
+<!-- 15 FINAL MVP -->
+<section id="final-mvp" class="section section--final">
+  <div class="wrap">
+    <p class="kicker"><span class="kicker__n">15</span> Final MVP</p>
+    <h2>Where the process lands</h2>
+
+    <p>Research → Pain Point → User Stories → Feature Ideation → Card Sort → V1 IA → Tree Test →
+      IA Pivot → MoSCoW → DFV all point to the same feature.</p>
+
+    <div class="winner-card">
+      <p class="winner-card__label">Selected priority</p>
+      <h3>Current Bus Status</h3>
+      <p class="winner-card__score">DFV score: 14 / 15</p>
+      <ul>
+        <li>Directly addresses the user's core uncertainty.</li>
+        <li>Strongly supports User Story 1.</li>
+        <li>Grounded in real-user research, not assumption.</li>
+        <li>The Tree Test revealed the single largest confusion (0/5) around exactly this feature,
+          which drove the IA pivot.</li>
+        <li>Received the highest DFV score among the two debated Must-Have candidates.</li>
+      </ul>
+    </div>
+
+    <p class="note"><strong>MVP principle:</strong> the MVP should prioritise solving the validated
+      user problem rather than including every candidate feature. This direction prioritises
+      reliable current-journey information, with the remaining features already scoped through
+      MoSCoW and DFV above.</p>
+
+    <div class="statusboard statusboard--resolved" role="img" aria-label="Illustrative departure board reading: bus status live, expected arrival 7 minutes, connecting train on track. This is a conceptual illustration of what the MVP replaces uncertainty with, not a usability finding.">
+      <div class="statusboard__head">
+        <span class="statusboard__dot statusboard__dot--live" aria-hidden="true"></span> WHAT THE MVP REPLACES UNCERTAINTY WITH
+      </div>
+      <dl class="statusboard__rows">
+        <div class="statusboard__row"><dt>BUS STATUS</dt><dd class="is-live">LIVE</dd></div>
+        <div class="statusboard__row"><dt>EXPECTED ARRIVAL</dt><dd class="is-live">7 MIN</dd></div>
+        <div class="statusboard__row"><dt>CONNECTING TRAIN</dt><dd class="is-live">ON TRACK</dd></div>
+      </dl>
+      <p class="statusboard__caption">Conceptual illustration only — not a usability result.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>HCI Mid-Term Case Study — Reducing Journey Uncertainty. Built with semantic HTML5 and CSS3
+      only, no JavaScript or frameworks. Every decision on this page traces to the research sections
+      above.</p>
+  </div>
+</footer>
+
+</body>
+</html>
