@@ -1775,3 +1775,33 @@ select:focus {
         display: none;
     }
 }
+
+
+.route-toggle-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 6px;
+    border-radius: var(--radius-card);
+}
+
+.route-toggle-btn {
+    padding: 12px 14px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition);
+    font-family: inherit;
+}
+
+.route-toggle-btn.active {
+    background: #ffffff;
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+}

@@ -119,34 +119,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Live "Updated Xs ago" Counter ---
     function updateLiveTimeCounter() {
-        const updatedEl = document.getElementById('home-last-updated');
-        if (!updatedEl || !window.BusSimulation) return;
+        if (!window.BusSimulation) return;
+        
         const diffSecs = Math.max(0, Math.floor((new Date() - window.BusSimulation.state.lastUpdated) / 1000));
-        if (diffSecs < 4) {
-            updatedEl.textContent = 'Just now';
-        } else if (diffSecs < 60) {
-            updatedEl.textContent = `${diffSecs}s ago`;
-        } else {
-            updatedEl.textContent = `${Math.floor(diffSecs / 60)}m ago`;
+        let text = 'Just now';
+        if (diffSecs >= 4 && diffSecs < 60) {
+            text = `${diffSecs}s ago`;
+        } else if (diffSecs >= 60) {
+            text = `${Math.floor(diffSecs / 60)}m ago`;
         }
+
+        const updatedEl = document.getElementById('home-last-updated');
+        if (updatedEl) updatedEl.textContent = text;
+        
+        const returnUpdatedEl = document.getElementById('return-last-updated');
+        if (returnUpdatedEl) returnUpdatedEl.textContent = text;
     }
     setInterval(updateLiveTimeCounter, 1000);
 
     // ==========================================================================
     // State Subscriptions & UI Updates
     // ==========================================================================
+    let currentRouteMode = 'forward';
+
     if (window.BusSimulation) {
-        window.BusSimulation.subscribe((state) => {
+        window.BusSimulation.subscribe((state, returnState) => {
             updateHome(state);
             updateDetails(state);
             updateTrainConnection(state);
-            updateRoutes(state);
+            updateRoutes(state, returnState);
             updateAlerts(state);
+        });
+    }
+
+    // Toggle button logic
+    const btnRouteForward = document.getElementById('btn-route-forward');
+    const btnRouteReturn = document.getElementById('btn-route-return');
+
+    if (btnRouteForward && btnRouteReturn) {
+        btnRouteForward.addEventListener('click', () => {
+            currentRouteMode = 'forward';
+            btnRouteForward.classList.add('active');
+            btnRouteReturn.classList.remove('active');
+            if (window.BusSimulation) {
+                updateRoutes(window.BusSimulation.state, window.BusSimulation.returnState);
+                updateHome(window.BusSimulation.state);
+            }
+        });
+
+        btnRouteReturn.addEventListener('click', () => {
+            currentRouteMode = 'return';
+            btnRouteReturn.classList.add('active');
+            btnRouteForward.classList.remove('active');
+            if (window.BusSimulation) {
+                updateRoutes(window.BusSimulation.state, window.BusSimulation.returnState);
+                updateHome(window.BusSimulation.state);
+            }
         });
     }
 
     // 1. Update Home Screen
     function updateHome(state) {
+        const activeState = currentRouteMode === 'forward' ? state : window.BusSimulation.returnState;
+        
         const statusEl = document.getElementById('home-bus-status');
         const pillText = document.getElementById('home-pill-text');
         const statusPill = document.getElementById('home-status-pill');
@@ -156,25 +191,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const progressFill = document.getElementById('home-progress-fill');
         const trainBadge = document.getElementById('home-train-badge');
         const islandText = document.getElementById('island-transit-text');
+        const routeDirection = document.querySelector('.route-direction');
 
-        if (!statusEl || !statusPill) return;
+        if (!statusEl || !statusPill || !activeState) return;
 
         // Reset class states
         statusEl.className = 'huge-status';
         statusPill.className = 'status-pill';
+        
+        if (routeDirection) {
+            routeDirection.textContent = currentRouteMode === 'forward' ? 'College → Station' : 'Station → College';
+        }
 
-        if (state.status === 'on_time') {
+        if (activeState.status === 'on_time') {
             statusEl.textContent = 'On Time';
             statusEl.classList.add('text-green');
             pillText.textContent = 'On Time';
             statusPill.classList.add('status-green');
             if (islandText) islandText.textContent = 'MSRTC • On Time';
-        } else if (state.status === 'delayed') {
-            statusEl.textContent = `Delayed ${state.delayMinutes} min`;
+        } else if (activeState.status === 'delayed') {
+            statusEl.textContent = `Delayed ${activeState.delayMinutes} min`;
             statusEl.classList.add('text-red');
             pillText.textContent = 'Delayed';
             statusPill.classList.add('status-red');
-            if (islandText) islandText.textContent = `MSRTC • +${state.delayMinutes}m`;
+            if (islandText) islandText.textContent = `MSRTC • +${activeState.delayMinutes}m`;
         } else {
             statusEl.textContent = 'Unavailable';
             statusEl.classList.add('text-amber');
@@ -183,49 +223,78 @@ document.addEventListener('DOMContentLoaded', () => {
             if (islandText) islandText.textContent = 'MSRTC • Offline';
         }
 
-        const currentStop = window.BusSimulation.STOPS[state.currentStopIndex];
+        const currentStop = window.BusSimulation.STOPS[activeState.currentStopIndex];
         locText.textContent = `Waiting at ${currentStop}`;
 
         // ETA calculation
-        const etaDate = window.BusSimulation.getBusETAAtStation();
-        if (etaDate) {
-            const mins = Math.max(0, Math.round((etaDate - new Date()) / 60000));
-            etaVal.textContent = mins;
-            etaUnit.textContent = mins === 1 ? 'min' : 'mins';
-        } else {
-            etaVal.textContent = 'Arrived';
-            etaUnit.textContent = '';
-        }
-
-        // Hero route progress calculation
-        const totalStops = window.BusSimulation.STOPS.length - 1;
-        const rawProgress = (state.currentStopIndex + state.progressBetweenStops) / totalStops;
-        const progressPercent = Math.min(100, Math.max(5, Math.round(rawProgress * 100)));
-        if (progressFill) {
-            progressFill.style.width = `${progressPercent}%`;
-        }
-
-        // Quick train verdict badge on Home
-        if (trainBadge && etaDate) {
-            const now = new Date();
-            const etaMins = Math.round((etaDate - now) / 60000);
-            const trainDep = window.BusSimulation.getTrainDepartureTime();
-            const depMins = Math.round((trainDep - now) / 60000);
-            const diff = depMins - etaMins;
-
-            trainBadge.className = 'chip-verdict';
-            if (diff >= 10) {
-                trainBadge.classList.add('verdict-yes');
-                trainBadge.textContent = 'Yes';
-            } else if (diff >= 0) {
-                trainBadge.classList.add('verdict-risk');
-                trainBadge.textContent = 'At Risk';
+        if (currentRouteMode === 'forward') {
+            const etaDate = window.BusSimulation.getBusETAAtStation();
+            if (etaDate) {
+                const mins = Math.max(0, Math.round((etaDate - new Date()) / 60000));
+                etaVal.textContent = mins;
+                etaUnit.textContent = mins === 1 ? 'min' : 'mins';
             } else {
-                trainBadge.classList.add('verdict-no');
-                trainBadge.textContent = 'No';
+                etaVal.textContent = 'Arrived';
+                etaUnit.textContent = '';
+            }
+
+            // Hero route progress calculation
+            const totalStops = window.BusSimulation.STOPS.length - 1;
+            const rawProgress = (activeState.currentStopIndex + activeState.progressBetweenStops) / totalStops;
+            const progressPercent = Math.min(100, Math.max(5, Math.round(rawProgress * 100)));
+            if (progressFill) {
+                progressFill.style.width = `${progressPercent}%`;
+            }
+
+            if (document.getElementById('btn-train')) {
+                document.getElementById('btn-train').style.display = 'flex';
+            }
+
+            // Quick train verdict badge on Home
+            if (trainBadge && etaDate) {
+                const now = new Date();
+                const etaMins = Math.round((etaDate - now) / 60000);
+                const trainDep = window.BusSimulation.getTrainDepartureTime();
+                const depMins = Math.round((trainDep - now) / 60000);
+                const diff = depMins - etaMins;
+
+                trainBadge.className = 'chip-verdict';
+                if (diff >= 10) {
+                    trainBadge.classList.add('verdict-yes');
+                    trainBadge.textContent = 'Yes';
+                } else if (diff >= 0) {
+                    trainBadge.classList.add('verdict-risk');
+                    trainBadge.textContent = 'At Risk';
+                } else {
+                    trainBadge.classList.add('verdict-no');
+                    trainBadge.textContent = 'No';
+                }
+            }
+        } else {
+            // Return Mode calculations
+            const etaMinutes = (activeState.currentStopIndex * 5) + (activeState.status === 'delayed' ? activeState.delayMinutes : 0);
+            if (activeState.currentStopIndex > 0) {
+                etaVal.textContent = Math.max(1, Math.round(etaMinutes - (activeState.progressBetweenStops * 5)));
+                etaUnit.textContent = 'min';
+            } else {
+                etaVal.textContent = 'Arrived';
+                etaUnit.textContent = '';
+            }
+
+            const totalStops = window.BusSimulation.STOPS.length - 1;
+            const rawProgress = (totalStops - activeState.currentStopIndex + activeState.progressBetweenStops) / totalStops;
+            const progressPercent = Math.min(100, Math.max(5, Math.round(rawProgress * 100)));
+            if (progressFill) {
+                progressFill.style.width = `${progressPercent}%`;
+            }
+
+            // Hide train connection card for return route since they are leaving the station
+            if (document.getElementById('btn-train')) {
+                document.getElementById('btn-train').style.display = 'none';
             }
         }
     }
+
 
     // 2. Update Train Connection Sub-screen
     function updateTrainConnection(state) {
@@ -362,46 +431,87 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 4. Update Routes & Stops List
-    function updateRoutes(state) {
+    function updateRoutes(state, returnState) {
         const list = document.getElementById('stops-list');
         if (!list) return;
 
         const searchTerm = (document.getElementById('stop-search')?.value || '').trim().toLowerCase();
         list.innerHTML = '';
 
-        window.BusSimulation.STOPS.forEach((stop, index) => {
-            if (searchTerm && !stop.toLowerCase().includes(searchTerm)) {
-                return;
-            }
+        if (currentRouteMode === 'forward') {
+            window.BusSimulation.STOPS.forEach((stop, index) => {
+                if (searchTerm && !stop.toLowerCase().includes(searchTerm)) return;
 
-            const li = document.createElement('li');
-            let subtext = '';
-            let etaText = '';
+                const li = document.createElement('li');
+                let subtext = '';
+                let etaText = '';
 
-            if (index < state.currentStopIndex) {
-                li.className = 'passed';
-                subtext = 'Departed';
-                etaText = 'Passed';
-            } else if (index === state.currentStopIndex) {
-                li.className = 'current';
-                subtext = 'Bus is here now';
-                etaText = 'Now';
-            } else {
-                li.className = 'upcoming';
-                const stopsAway = index - state.currentStopIndex;
-                etaText = window.BusSimulation.getETAForStop(index);
-                subtext = `${stopsAway} ${stopsAway === 1 ? 'stop' : 'stops'} away`;
-            }
+                if (index < state.currentStopIndex) {
+                    li.className = 'passed';
+                    subtext = 'Departed';
+                    etaText = 'Passed';
+                } else if (index === state.currentStopIndex) {
+                    li.className = 'current';
+                    subtext = 'Bus is here now';
+                    etaText = 'Now';
+                } else {
+                    li.className = 'upcoming';
+                    const stopsAway = index - state.currentStopIndex;
+                    etaText = window.BusSimulation.getETAForStop(index);
+                    subtext = `${stopsAway} ${stopsAway === 1 ? 'stop' : 'stops'} away`;
+                }
 
-            li.innerHTML = `
-                <div class="stop-info">
-                    <span class="stop-name">${stop}</span>
-                    <span class="stop-sub">${subtext}</span>
-                </div>
-                <span class="stop-eta-badge">${etaText}</span>
-            `;
-            list.appendChild(li);
-        });
+                li.innerHTML = `
+                    <div class="stop-info">
+                        <span class="stop-name">${stop}</span>
+                        <span class="stop-sub">${subtext}</span>
+                    </div>
+                    <span class="stop-eta-badge">${etaText}</span>
+                `;
+                list.appendChild(li);
+            });
+        } else {
+            // Return Mode
+            if (!returnState) return;
+            const returnStops = [...window.BusSimulation.STOPS].reverse();
+            const currentReturnIndex = window.BusSimulation.STOPS.length - 1 - returnState.currentStopIndex;
+
+            returnStops.forEach((stop, index) => {
+                if (searchTerm && !stop.toLowerCase().includes(searchTerm)) return;
+
+                const li = document.createElement('li');
+                let subtext = '';
+                let etaText = '';
+
+                if (index < currentReturnIndex) {
+                    li.className = 'passed';
+                    subtext = 'Departed';
+                    etaText = 'Passed';
+                } else if (index === currentReturnIndex) {
+                    li.className = 'current';
+                    subtext = 'Bus is here now';
+                    etaText = 'Now';
+                } else {
+                    li.className = 'upcoming';
+                    const stopsAway = index - currentReturnIndex;
+                    let mins = (stopsAway * 5) + (returnState.status === 'delayed' ? Math.round(returnState.delayMinutes * 0.5) : 0);
+                    mins -= Math.round(returnState.progressBetweenStops * 5);
+                    mins = Math.max(1, mins);
+                    
+                    etaText = `${mins} min`;
+                    subtext = `${stopsAway} ${stopsAway === 1 ? 'stop' : 'stops'} away`;
+                }
+
+                li.innerHTML = `
+                    <div class="stop-info">
+                        <span class="stop-name">${stop}</span>
+                        <span class="stop-sub">${subtext}</span>
+                    </div>
+                    <span class="stop-eta-badge">${etaText}</span>
+                `;
+                list.appendChild(li);
+            });
+        }
     }
 
     // Stop Search filter
@@ -598,4 +708,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start Simulation Background Loop
     window.BusSimulation.startSimulation();
 });
+
+
+
 

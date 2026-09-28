@@ -49,15 +49,28 @@
         lastUpdated: new Date()
     };
 
+    const returnState = {
+        currentStopIndex: 4, // Pinglas
+        progressBetweenStops: 0,
+        status: 'on_time',
+        delayMinutes: 0,
+        delayReason: 'Running smoothly on return trip.',
+        currentSpeed: 45,
+        occupancy: '35% (Seats available)',
+        alerts: [],
+        lastUpdated: new Date()
+    };
+
     const listeners = [];
     let simulationTimer = null;
     let isPaused = false;
 
     function notifyListeners() {
         state.lastUpdated = new Date();
+        returnState.lastUpdated = new Date();
         listeners.forEach(fn => {
             try {
-                fn(state);
+                fn(state, returnState);
             } catch (err) {
                 console.error("Error in listener callback:", err);
             }
@@ -66,7 +79,7 @@
 
     function subscribe(fn) {
         listeners.push(fn);
-        fn(state); // Immediate initial sync
+        fn(state, returnState); // Immediate initial sync
     }
 
     function formatTime(date) {
@@ -232,6 +245,24 @@
                 addAlert('info', 'Delay Cleared', 'Traffic normal. Bus is back on schedule.');
             }
 
+            // Advance return progress
+            if (returnState.currentStopIndex > 0) {
+                returnState.progressBetweenStops += 0.2;
+                returnState.currentSpeed = returnState.status === 'delayed' 
+                    ? Math.floor(20 + Math.random() * 15) 
+                    : Math.floor(40 + Math.random() * 15);
+
+                if (returnState.progressBetweenStops >= 1) {
+                    returnState.progressBetweenStops = 0;
+                    returnState.currentStopIndex--;
+                }
+            } else {
+                returnState.currentStopIndex = STOPS.length - 1;
+                returnState.progressBetweenStops = 0;
+                returnState.status = 'on_time';
+                returnState.delayMinutes = 0;
+            }
+
             notifyListeners();
         }, 3500); // 3.5s per tick for lively exhibition demonstration
     }
@@ -240,6 +271,7 @@
     window.BusSimulation = {
         STOPS,
         state,
+        returnState,
         subscribe,
         notifyListeners,
         startSimulation,
@@ -255,3 +287,4 @@
         addAlert
     };
 })();
+
